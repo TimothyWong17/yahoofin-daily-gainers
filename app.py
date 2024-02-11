@@ -24,9 +24,6 @@ def getLineGraphData(stock_symbol):
 
 app = Flask(__name__)
 
-
-
-
 @app.route('/')
 def index():
     top_10_daily_gainers, last_refresh_date = getListofStocksInDataset()
@@ -37,7 +34,6 @@ def index():
 def chart():
     top_10_daily_gainers, last_refresh_date = getListofStocksInDataset()
     stock_selected = request.form['stock_select']
-    print(stock_selected)
     stock_symbol, stock_name, labels, values = getLineGraphData(stock_selected)
     return render_template('index.html',top_10_daily_gainers=top_10_daily_gainers, last_refresh_date=last_refresh_date, labels=labels, values=values, stock_symbol=stock_symbol, stock_name=stock_name)
 
