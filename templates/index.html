@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Yahoo Daily Gainers</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    </head>
+    <body>        
+        <div class="container">
+        <div class="row justify-content-center">
+            <div>
+            <h1>Yahoo Daily Gainers</h1>
+            <center><p>Last Refresh Date: {{last_refresh_date}}</p></center>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <form action='/' method="POST" >
+                <div class="form-group">
+                    <select class="form-control"  name="stock_select">
+                        <option disabled selected value> -- select an option -- </option>
+                        {% for stock in top_10_daily_gainers %}
+                        <option  value="{{stock[0]}}">{{stock[1]}} ({{stock[0]}})</option>
+                        {% endfor %}
+                    </select>
+                    </div>
+                <div class="row justify-content-center">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+        <br>
+
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+        <div>
+        <canvas id="line-chart" width="800" height="250"></canvas>
+        </div>
+       
+        <script>
+
+
+
+            let data_points = {{values}}
+            let open_prices = data_points.map(price => price[0]);
+            let close_prices = data_points.map(price => price[1]);
+            let high_prices = data_points.map(price => price[2]);
+            let low_prices = data_points.map(price => price[3]);
+            let stock_symbol = '{{stock_symbol}}'
+            let stock_name = '{{stock_name}}'
+
+
+
+            
+            new Chart(document.getElementById("line-chart"), {
+                type: 'line',
+                data: {
+                    labels: {{labels | safe}},
+                    datasets: [{
+                        label: "Open Price",
+                        data: open_prices,
+                        borderColor: "#3e95cd",
+                        backgroundColor: "#3e95cd",
+                        fill: false
+                    },
+                    {
+                        label: "Close Price",
+                        data: close_prices,
+                        borderColor: "#8e5ea2",
+                        backgroundColor: "#8e5ea2",
+                        fill: false
+                    },
+                    {
+                        label: "High Price",
+                        data: high_prices,
+                        borderColor: "#3cba9f",
+                        backgroundColor: "#3cba9f",
+                        fill: false
+                    },
+                    {
+                        label: "Low Price",
+                        data: low_prices,
+                        borderColor: "#e8c3b9",
+                        backgroundColor: "#e8c3b9",
+                        fill: false
+                    }
+                    
+                ]
+                },
+                options: {
+                  title: {
+                    display: true,
+                    text: `${stock_name} (${stock_symbol}) - Stock Trendline (Last 20 Days)`
+                  }
+                }
+              });
+
+
+        </script>
+
+
+
+
+    </body>
+</html>
